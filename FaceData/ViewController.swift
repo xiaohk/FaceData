@@ -16,6 +16,8 @@ class ViewController: NSViewController {
     
     @IBOutlet var outputPathText: NSTextField!
     
+    @IBOutlet var startSecondText: NSTextField!
+    @IBOutlet var numOfFramesText: NSTextField!
     @IBAction func selectVideo(_ sender: NSButton) {
         browseFiles(title: "Choose your video file", selectDirectory: false,
                     allowedFileTypes: ["mp4"], textField: videoPathText)

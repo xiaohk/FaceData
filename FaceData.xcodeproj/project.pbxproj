@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19668D0D1FC8BFEC0099BC1B /* FaceDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19668D0C1FC8BFEC0099BC1B /* FaceDataTests.swift */; };
 		19B963011FCB51B20046C7F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B963001FCB51B20046C7F9 /* AppDelegate.swift */; };
 		19B963031FCB51B20046C7F9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B963021FCB51B20046C7F9 /* ViewController.swift */; };
 		19B963051FCB51B20046C7F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 19B963041FCB51B20046C7F9 /* Assets.xcassets */; };
@@ -14,7 +15,20 @@
 		19B963121FCB5DD60046C7F9 /* TrainingConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B963111FCB5DD60046C7F9 /* TrainingConverter.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		19668D0F1FC8BFEC0099BC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 19B962F51FCB51B20046C7F9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 19B962FC1FCB51B20046C7F9;
+			remoteInfo = FaceData;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		19668D0A1FC8BFEC0099BC1B /* FaceDataTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceDataTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		19668D0C1FC8BFEC0099BC1B /* FaceDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDataTests.swift; sourceTree = "<group>"; };
+		19668D0E1FC8BFEC0099BC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19B962FD1FCB51B20046C7F9 /* FaceData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19B963001FCB51B20046C7F9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19B963021FCB51B20046C7F9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -26,6 +40,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		19668D071FC8BFEC0099BC1B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		19B962FA1FCB51B20046C7F9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -36,10 +57,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		19668D0B1FC8BFEC0099BC1B /* FaceDataTests */ = {
+			isa = PBXGroup;
+			children = (
+				19668D0C1FC8BFEC0099BC1B /* FaceDataTests.swift */,
+				19668D0E1FC8BFEC0099BC1B /* Info.plist */,
+			);
+			path = FaceDataTests;
+			sourceTree = "<group>";
+		};
 		19B962F41FCB51B20046C7F9 = {
 			isa = PBXGroup;
 			children = (
 				19B962FF1FCB51B20046C7F9 /* FaceData */,
+				19668D0B1FC8BFEC0099BC1B /* FaceDataTests */,
 				19B962FE1FCB51B20046C7F9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				19B962FD1FCB51B20046C7F9 /* FaceData.app */,
+				19668D0A1FC8BFEC0099BC1B /* FaceDataTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -77,6 +109,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		19668D091FC8BFEC0099BC1B /* FaceDataTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 19668D131FC8BFEC0099BC1B /* Build configuration list for PBXNativeTarget "FaceDataTests" */;
+			buildPhases = (
+				19668D061FC8BFEC0099BC1B /* Sources */,
+				19668D071FC8BFEC0099BC1B /* Frameworks */,
+				19668D081FC8BFEC0099BC1B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				19668D101FC8BFEC0099BC1B /* PBXTargetDependency */,
+			);
+			name = FaceDataTests;
+			productName = FaceDataTests;
+			productReference = 19668D0A1FC8BFEC0099BC1B /* FaceDataTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		19B962FC1FCB51B20046C7F9 /* FaceData */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 19B9630D1FCB51B20046C7F9 /* Build configuration list for PBXNativeTarget "FaceData" */;
@@ -104,6 +154,11 @@
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "Jay Wong";
 				TargetAttributes = {
+					19668D091FC8BFEC0099BC1B = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 19B962FC1FCB51B20046C7F9;
+					};
 					19B962FC1FCB51B20046C7F9 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
@@ -124,11 +179,19 @@
 			projectRoot = "";
 			targets = (
 				19B962FC1FCB51B20046C7F9 /* FaceData */,
+				19668D091FC8BFEC0099BC1B /* FaceDataTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		19668D081FC8BFEC0099BC1B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		19B962FB1FCB51B20046C7F9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -141,6 +204,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		19668D061FC8BFEC0099BC1B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19668D0D1FC8BFEC0099BC1B /* FaceDataTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		19B962F91FCB51B20046C7F9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -152,6 +223,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		19668D101FC8BFEC0099BC1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 19B962FC1FCB51B20046C7F9 /* FaceData */;
+			targetProxy = 19668D0F1FC8BFEC0099BC1B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		19B963061FCB51B20046C7F9 /* Main.storyboard */ = {
@@ -165,6 +244,38 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		19668D111FC8BFEC0099BC1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = VGERK2KVH9;
+				INFOPLIST_FILE = FaceDataTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Jay.FaceDataTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FaceData.app/Contents/MacOS/FaceData";
+			};
+			name = Debug;
+		};
+		19668D121FC8BFEC0099BC1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = VGERK2KVH9;
+				INFOPLIST_FILE = FaceDataTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Jay.FaceDataTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FaceData.app/Contents/MacOS/FaceData";
+			};
+			name = Release;
+		};
 		19B9630B1FCB51B20046C7F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -276,6 +387,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FaceData/FaceData.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = VGERK2KVH9;
@@ -283,6 +395,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Jay.FaceData;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -292,6 +405,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FaceData/FaceData.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = VGERK2KVH9;
@@ -299,6 +413,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Jay.FaceData;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -306,6 +421,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		19668D131FC8BFEC0099BC1B /* Build configuration list for PBXNativeTarget "FaceDataTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19668D111FC8BFEC0099BC1B /* Debug */,
+				19668D121FC8BFEC0099BC1B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		19B962F81FCB51B20046C7F9 /* Build configuration list for PBXProject "FaceData" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
