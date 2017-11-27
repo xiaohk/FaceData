@@ -10,11 +10,10 @@ import Foundation
 import AVFoundation
 import Vision
 
-
 class TrainingConverter{
     
-    var videoPath:String?
-    var outputPath:String?
+    var videoPath:URL?
+    var outputPath:URL?
     var startSecond = 0
     var numOfFrames = 0
     var asset:AVAsset
@@ -22,26 +21,25 @@ class TrainingConverter{
     var originPath:URL
     var landmarkPath:URL
     
-    let timeScale = 10
-    
     // Init properties
     init(videoPath:String, outputPath:String, startSecond:Int, numOfFrames:Int){
-        self.videoPath = videoPath
-        self.outputPath = outputPath
+        self.videoPath = URL(fileURLWithPath: videoPath)
+        self.outputPath = URL(fileURLWithPath: outputPath)
         self.startSecond = startSecond
         self.numOfFrames = numOfFrames
         
         // Create generator to extract frame
-        let videoURL = URL(fileURLWithPath: self.videoPath!)
-        self.asset = AVAsset(url: videoURL)
+        self.asset = AVAsset(url: self.videoPath!)
         self.imageGenerator = AVAssetImageGenerator(asset: asset)
         
         // Create image destination
-        let supportURL = FileManager.default.urls(for: .applicationSupportDirectory,
-                                                  in: .userDomainMask)[0]
+        //let supportURL = FileManager.default.urls(for: .applicationSupportDirectory,
+        //                                          in: .userDomainMask)[0]
         // Create /origin and /landmark directories
-        self.originPath = supportURL.appendingPathComponent("origin")
-        self.landmarkPath = supportURL.appendingPathComponent("landmark")
+        // self.originPath = supportURL.appendingPathComponent("origin")
+        // self.landmarkPath = supportURL.appendingPathComponent("landmark")
+        self.originPath = self.outputPath!.appendingPathComponent("origin")
+        self.landmarkPath = self.outputPath!.appendingPathComponent("landmark")
         
         do {
             try FileManager.default.createDirectory(
@@ -55,14 +53,22 @@ class TrainingConverter{
     
     // Main functions, sample frames, and extract them
     func convertFrames(){
-        print(self.asset.duration)
-        extractFrameFromVide(filename: "img001", second: 400)
+        // Smaple the frames
+        let frames = self.sampleFrames()
+        assert(frames.count == self.numOfFrames)
+        
+        // Extract frames
+        for i in 1...self.numOfFrames{
+            print(i)
+            let maxLength = "\(self.numOfFrames)".count
+            let name = "img" + String(format: "%0\(maxLength)d", i)
+            extractFrameFromVide(filename: name, time:frames[i-1])
+        }
     }
     
     // Extract a CGImage (frame) from the video at the given time
-    func extractFrameFromVide(filename:String, second:Int){
+    func extractFrameFromVide(filename:String, time:CMTime){
 
-        let time = CMTimeMake(Int64(second), Int32(timeScale))
         var generatedCGImage:CGImage
         
         // Extract the frame at that time
@@ -84,6 +90,16 @@ class TrainingConverter{
                 CGImageDestinationFinalize(landmarkDestination)
             } else {
                 // No face detected in this frame
+                print("No face detected")
+                
+                // Also save the origin image
+                generatedCGImage = try self.imageGenerator.copyCGImage(at: time,
+                                                                       actualTime: nil)
+                let originDestination = CGImageDestinationCreateWithURL(
+                    self.originPath.appendingPathComponent("no_face_"+filename+".png") as CFURL,
+                    kUTTypePNG, 1, nil)!
+                CGImageDestinationAddImage(originDestination, generatedCGImage, nil)
+                CGImageDestinationFinalize(originDestination)
                 return
             }
         } catch {
@@ -117,6 +133,9 @@ class TrainingConverter{
                     if let faceContour = landmarks.faceContour {
                         points.append(faceContour)
                     }
+                    if let medianLine = landmarks.medianLine {
+                        points.append(medianLine)
+                    }
                     if let leftEye = landmarks.leftEye {
                         points.append(leftEye)
                     }
@@ -128,9 +147,6 @@ class TrainingConverter{
                     }
                     if let noseCrest = landmarks.noseCrest {
                         points.append(noseCrest)
-                    }
-                    if let medianLine = landmarks.medianLine {
-                        points.append(medianLine)
                     }
                     if let outerLips = landmarks.outerLips {
                         points.append(outerLips)
@@ -178,10 +194,6 @@ class TrainingConverter{
                                 space: colorSpace,
                                 bitmapInfo: bitmapInfo.rawValue)!
         
-        // To the left top point
-        context.translateBy(x: 0, y: CGFloat(source.height))
-        // Flip the image
-        context.scaleBy(x: 1.0, y: -1.0)
         context.setLineJoin(.round)
         context.setLineCap(.round)
         // Make the pixel look more smooth
@@ -192,20 +204,57 @@ class TrainingConverter{
         context.setFillColor(CGColor.black)
         context.fill(CGRect(x: 0, y: 0, width: context.width, height: context.height))
         
+        // Draw landmarks
+        context.setStrokeColor(CGColor.white)
+        context.setLineWidth(2.0)
+        
+        let rectWidth = CGFloat(source.width) * boundingBox.size.width
+        let rectHeight = CGFloat(source.height) * boundingBox.size.height
+        
+        for i in 0..<points.count {
+            let landmark = points[i]
+            let points = landmark.normalizedPoints
+            
+            // The points are normalized, we have to scale them back (using the
+            // bounding box)
+            let scaledPoints = points.map {
+                CGPoint(x: boundingBox.origin.x * CGFloat(source.width) +
+                            $0.x * rectWidth,
+                        y: boundingBox.origin.y * CGFloat(source.height) +
+                            $0.y * rectHeight) }
+            
+            context.addLines(between: scaledPoints)
+            
+            // If the points are not from contor or medle line, we close the connections
+            if i > 1{
+                context.move(to: scaledPoints.last!)
+                context.addLine(to: scaledPoints.first!)
+            }
+            context.drawPath(using: CGPathDrawingMode.stroke)
+        }
         return context.makeImage()!
     }
+    
+    // Smaple self.numOfFrames from the valid time duration
+    func sampleFrames() -> [CMTime]{
+        let duration = self.asset.duration
+        let start = CMTimeConvertScale(CMTimeMake(Int64(self.startSecond), 1),
+                                       duration.timescale, .default)
+        let validDuration = CMTimeSubtract(duration, start)
+        let timeSlice = CMTimeMultiplyByRatio(validDuration, 1, Int32(self.numOfFrames))
+        
+        var frameTimes = [start]
+        for i in 1..<self.numOfFrames{
+            let cur = CMTimeAdd(start, CMTimeMultiply(timeSlice, Int32(i)))
+            if CMTimeCompare(cur, duration) >= 0{
+                break
+            } else {
+                frameTimes.append(cur)
+            }
+        }
+        return frameTimes
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

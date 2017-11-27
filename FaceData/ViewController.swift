@@ -17,7 +17,9 @@ class ViewController: NSViewController {
     @IBOutlet var outputPathText: NSTextField!
     
     @IBOutlet var startSecondText: NSTextField!
+    
     @IBOutlet var numOfFramesText: NSTextField!
+    
     @IBAction func selectVideo(_ sender: NSButton) {
         browseFiles(title: "Choose your video file", selectDirectory: false,
                     allowedFileTypes: ["mp4"], textField: videoPathText)
@@ -29,6 +31,11 @@ class ViewController: NSViewController {
     }
     
     @IBAction func startConvert(_ sender: NSButton) {
+        let converter = TrainingConverter(videoPath: videoPathText.stringValue ,
+                                          outputPath: outputPathText.stringValue,
+                                          startSecond: Int(startSecondText.intValue),
+                                          numOfFrames: Int(numOfFramesText.intValue))
+        converter.convertFrames()
     }
     
     // +++++++++++++++++++++ Main functions ++++++++++++++++++++++++++
