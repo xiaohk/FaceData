@@ -15,6 +15,7 @@ class TrainingConverter{
     var videoPath:URL?
     var outputPath:URL?
     var startSecond = 0
+    var endSecond = 1
     var numOfFrames = 0
     var asset:AVAsset
     var imageGenerator:AVAssetImageGenerator
@@ -22,10 +23,12 @@ class TrainingConverter{
     var landmarkPath:URL
     
     // Init properties
-    init(videoPath:String, outputPath:String, startSecond:Int, numOfFrames:Int){
+    init(videoPath:String, outputPath:String, startSecond:Int, endSecond:Int,
+         numOfFrames:Int){
         self.videoPath = URL(fileURLWithPath: videoPath)
         self.outputPath = URL(fileURLWithPath: outputPath)
         self.startSecond = startSecond
+        self.endSecond = endSecond
         self.numOfFrames = numOfFrames
         
         // Create generator to extract frame
@@ -55,7 +58,7 @@ class TrainingConverter{
     func convertFrames(){
         // Smaple the frames
         let frames = self.sampleFrames()
-        assert(frames.count == self.numOfFrames)
+        //assert(frames.count == self.numOfFrames)
         
         // Extract frames
         for i in 1...self.numOfFrames{
@@ -240,7 +243,11 @@ class TrainingConverter{
         let duration = self.asset.duration
         let start = CMTimeConvertScale(CMTimeMake(Int64(self.startSecond), 1),
                                        duration.timescale, .default)
-        let validDuration = CMTimeSubtract(duration, start)
+        let end = CMTimeConvertScale(CMTimeMake(Int64(self.endSecond), 1),
+                                       duration.timescale, .default)
+        let validDuration = CMTimeSubtract(end, start)
+        print(end)
+        print(duration)
         let timeSlice = CMTimeMultiplyByRatio(validDuration, 1, Int32(self.numOfFrames))
         
         var frameTimes = [start]
