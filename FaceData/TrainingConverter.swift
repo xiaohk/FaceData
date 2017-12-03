@@ -35,6 +35,11 @@ class TrainingConverter{
         self.asset = AVAsset(url: self.videoPath!)
         self.imageGenerator = AVAssetImageGenerator(asset: asset)
         
+        // No tolerance, otherwise lazy generator repeats tons of frames!
+        self.imageGenerator.appliesPreferredTrackTransform = true
+        self.imageGenerator.requestedTimeToleranceAfter = kCMTimeZero
+        self.imageGenerator.requestedTimeToleranceBefore = kCMTimeZero
+        
         // Create image destination
         //let supportURL = FileManager.default.urls(for: .applicationSupportDirectory,
         //                                          in: .userDomainMask)[0]
@@ -65,12 +70,12 @@ class TrainingConverter{
             print(i)
             let maxLength = "\(self.numOfFrames)".count
             let name = "img" + String(format: "%0\(maxLength)d", i)
-            extractFrameFromVide(filename: name, time:frames[i-1])
+            extractFrameFromVideo(filename: name, time:frames[i-1])
         }
     }
     
     // Extract a CGImage (frame) from the video at the given time
-    func extractFrameFromVide(filename:String, time:CMTime){
+    func extractFrameFromVideo(filename:String, time:CMTime){
 
         var generatedCGImage:CGImage
         

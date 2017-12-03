@@ -205,6 +205,7 @@ class ViewController: NSViewController {
             
             // Extract frames
             for i in 1...frames.count{
+                print(frames[i-1])
                 // Cancel this thread if user hits cancel
                 if (self!.cancelProcess){
                     break
@@ -213,7 +214,7 @@ class ViewController: NSViewController {
                 print(i)
                 let maxLength = "\(num ?? 100)".count
                 let name = "img" + String(format: "%0\(maxLength)d", i)
-                converter.extractFrameFromVide(filename: name, time:frames[i-1])
+                converter.extractFrameFromVideo(filename: name, time:frames[i-1])
                 
                 // Update the UI
                 DispatchQueue.main.async {
