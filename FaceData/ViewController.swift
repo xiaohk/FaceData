@@ -22,13 +22,21 @@ class ViewController: NSViewController {
     
     @IBOutlet var numOfFramesText: NSTextField!
     
-    @IBOutlet var outputLabel: NSTextField!
+    @IBOutlet var selectVideoButton: NSButton!
     
+    @IBOutlet var selectOutputButton: NSButton!
+    
+    @IBOutlet var startButton: NSButton!
+    
+    @IBOutlet var cancelButton: NSButton!
+    
+    var cancelProcess = false
+    var outputPath:String?
     var numOfFrames:Int?
     var processTime:Int?{
         set{
             let process = Int(Double(newValue!) / Double(numOfFrames!) * 100)
-            outputLabel.stringValue = "Finished \(process) %"
+            self.view.window?.title = "Processing video: Finished \(process) %"
         }
         get{
             return self.processTime
@@ -43,6 +51,10 @@ class ViewController: NSViewController {
     @IBAction func selectFolder(_ sender: NSButton) {
         browseFiles(title: "Choose the output folder", selectDirectory: true,
                     allowedFileTypes: ["folder"], textField: outputPathText)
+    }
+    
+    @IBAction func cancelConvert(_ sender: NSButton) {
+        self.cancelProcess = true
     }
     
     @IBAction func startConvert(_ sender: NSButton) {
@@ -74,41 +86,59 @@ class ViewController: NSViewController {
             clearTextFields(field: numOfFramesText)
             return
         }
-        if startSecondText.intValue >= endSecondText.intValue{
+        if startSecondText.intValue >= endSecondText.intValue &&
+            startSecondText.stringValue != "" &&
+            endSecondText.stringValue != ""
+        {
             alertWindow(message: "Bad input",
-                        information: "Ending second should be greater than the starting second",
+                        information: "Ending second should be greater than the starting second.",
                         button: "All right",
                         style: .warning)
             endSecondText.becomeFirstResponder()
             clearTextFields(field: endSecondText)
             return
         }
+        if videoPathText.stringValue == ""{
+            alertWindow(message: "Bad input",
+                        information: "Please select the video file.",
+                        button: "All right",
+                        style: .warning)
+            selectVideoButton.becomeFirstResponder()
+            return
+        }
+        if outputPathText.stringValue == ""{
+            alertWindow(message: "Bad input",
+                        information: "Please select the output directory.",
+                        button: "All right",
+                        style: .warning)
+            selectOutputButton.becomeFirstResponder()
+            return
+        }
         
-        numOfFrames = Int(numOfFramesText.intValue)
+        let start = startSecondText.stringValue == "" ? 0 :
+                        Int(startSecondText.stringValue)!
+        let end = endSecondText.stringValue == "" ? 0 :
+                        Int(endSecondText.stringValue)!
+        let num = numOfFramesText.stringValue == "" ? 128 :
+                        Int(numOfFramesText.stringValue)!
+        
+        outputPath = outputPathText.stringValue
+        numOfFrames = num
         processTime = 0
-        
         
         let converter = TrainingConverter(videoPath: videoPathText.stringValue ,
                                           outputPath: outputPathText.stringValue,
-                                          startSecond: Int(startSecondText.intValue),
-                                          endSecond: Int(endSecondText.intValue),
-                                          numOfFrames: Int(numOfFramesText.intValue))
+                                          startSecond: start,
+                                          endSecond: end,
+                                          numOfFrames: num)
         convertFrames(converter: converter)
-        
-        //clearTextFields()
     }
     
     // +++++++++++++++++++++ Main functions ++++++++++++++++++++++++++
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-    }
-    
-    override var representedObject: Any? {
-        didSet {
-            // Update the view, if already loaded.
-        }
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        self.view.window?.title = "Face Data"
+        cancelButton.isEnabled = false
     }
     
     // ++++++++++++++++++++++ Helper functions +++++++++++++++++++++++++
@@ -143,7 +173,7 @@ class ViewController: NSViewController {
         alert.messageText = message
         alert.informativeText = information
         alert.alertStyle = style
-        alert.addButton(withTitle: "All right")
+        alert.addButton(withTitle: button)
         alert.runModal()
     }
     
@@ -155,7 +185,6 @@ class ViewController: NSViewController {
             startSecondText.stringValue = ""
             endSecondText.stringValue = ""
             numOfFramesText.stringValue = ""
-            outputLabel.stringValue = ""
         } else {
             field!.stringValue = ""
         }
@@ -165,6 +194,8 @@ class ViewController: NSViewController {
     func convertFrames(converter: TrainingConverter){
         // Dispatch the process in the background
         let group = DispatchGroup()
+        self.startButton.isEnabled = false
+        self.cancelButton.isEnabled = true
         group.enter()
         DispatchQueue.global(qos: .background).async {
             [weak self] in
@@ -174,6 +205,11 @@ class ViewController: NSViewController {
             
             // Extract frames
             for i in 1...frames.count{
+                // Cancel this thread if user hits cancel
+                if (self!.cancelProcess){
+                    break
+                }
+                
                 print(i)
                 let maxLength = "\(num ?? 100)".count
                 let name = "img" + String(format: "%0\(maxLength)d", i)
@@ -188,12 +224,22 @@ class ViewController: NSViewController {
         }
         group.notify(queue: .main){
             [weak self] in
-            self!.alertWindow(message: "Success 🎉",
-                              information: "Your process is finished.",
-                              button: "Ok",
-                              style: .informational)
-            //NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: self!.endSecondText)
+            if !self!.cancelProcess{
+                self!.alertWindow(message: "Success 🎉",
+                                  information: "Your process is finished.",
+                                  button: "Ok",
+                                  style: .informational)
+                self!.cancelProcess = false
+                
+                // Open the output files
+                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: self!.outputPath!)
+            }
+            
+            // Button states, and clear the inputs
             self!.clearTextFields()
+            self!.view.window?.title = "Face Data"
+            self!.cancelButton.isEnabled = false
+            self!.startButton.isEnabled = true
         }
     }
 }

@@ -243,11 +243,16 @@ class TrainingConverter{
         let duration = self.asset.duration
         let start = CMTimeConvertScale(CMTimeMake(Int64(self.startSecond), 1),
                                        duration.timescale, .default)
-        let end = CMTimeConvertScale(CMTimeMake(Int64(self.endSecond), 1),
-                                       duration.timescale, .default)
+        
+        // If the ending time is longer than the total duration, just ignore the ending time
+        var end = CMTimeConvertScale(CMTimeMake(Int64(self.endSecond), 1),
+                                     duration.timescale, .default)
+        if self.endSecond == 0 || CMTimeCompare(duration, end) <= 0{
+            end = duration
+        }
+
         let validDuration = CMTimeSubtract(end, start)
-        print(end)
-        print(duration)
+
         let timeSlice = CMTimeMultiplyByRatio(validDuration, 1, Int32(self.numOfFrames))
         
         var frameTimes = [start]
