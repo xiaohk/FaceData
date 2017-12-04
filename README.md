@@ -3,7 +3,7 @@
 A macOS application used to auto-annotate landmarks from a video. Those landmarks can further be used as training data for Generative Adversarial Networks (GANs).
 
 <p align="center">
-	<img src="https://i.imgur.com/a7aFhEU.gif" height="250">
+	<img src="./result.gif" height="250">
 </p>
 
 ## Getting Started
