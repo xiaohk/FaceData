@@ -205,7 +205,6 @@ class ViewController: NSViewController {
             
             // Extract frames
             for i in 1...frames.count{
-                print(frames[i-1])
                 // Cancel this thread if user hits cancel
                 if (self!.cancelProcess){
                     break
