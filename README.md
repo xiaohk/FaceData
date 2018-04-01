@@ -34,7 +34,7 @@ You can either download the binary file from [`Rease`](https://github.com/xiaohk
 - Two sub-directories `origin` and `landmark` will be created in the specified output directory.
 - `origin` contains the original frames extracted from the video, with file name: `img001.png`.
 - `landmark` contains the landmark image drawn based on the corresponding frame in `origin`, with file name: `img001lm.png`.
-- If the there is no face detected in one original frame, the corresponding file name in `landmark` is `no_face_img001lm.png`.
+- If there is no face detected in one original frame, the corresponding file name in `landmark` is `no_face_img001lm.png`.
 
 ### Output Images Processing
 
