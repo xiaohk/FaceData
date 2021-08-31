@@ -2,6 +2,9 @@
 
 A macOS application used to auto-annotate landmarks from a video. Those landmarks can further be used as training data for Generative Adversarial Networks (GANs).
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5348316.svg)](https://doi.org/10.5281/zenodo.5348316)
+[![License](https://img.shields.io/badge/License-MIT-red)](https://github.com/xiaohk/FaceData/blob/master/LICENSE)
+
 <p align="center">
 	<img src="./result.gif" height="250">
 </p>
